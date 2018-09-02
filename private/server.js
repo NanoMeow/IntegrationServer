@@ -306,7 +306,7 @@ const RequestEvent = class {
         }));
     }
 
-    // Assertion in fail method
+    // Assertion in method fail
 
     ez400(msg = "Bad request") {
         this.fail(400, msg);
