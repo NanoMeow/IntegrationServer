@@ -17,11 +17,14 @@ Adapt when appropriate.
 
 ## Endpoints
 
-Some endpoints may be disabled. All returned payloads have the following
-entry keys:
-entry keys:
-- `success`: `boolean` - Result state.
-- `message`: `string|undefined` - Result message, if there is any.
+The entire or some part of request payload may be ignored.
+
+All response payloads will be JSON. They have the following entry keys, plus
+specific keys depending on the endpoint:
+- `success: boolean` - Result state.
+- `message: string|undefined` - Result message, if there is any.
+
+Some endpoints may be disabled.
 
 ### GET `/` or 
 
@@ -35,32 +38,44 @@ Do nothing, payload not read.
 
 Send back request payload, with a bit more debug information.
 
-Required payload:
-- `*`: `Any` - Anything.
+Request payload:
+- `*: Any` - Anything.
 
-Returned payload:
-- `headers`: `Object` - Request headers.
-- `payload`: `Any` - Request payload.
+Response payload:
+- `headers: Object` - Request headers.
+- `payload: Any` - Request payload.
 
 ### POST `/dbinit`
 
-Initialize 
+Initialize database.
+
+Request payload:
+- `auth: string|undefined` - Authentication key, only needed for production
+  mode.
+
+### POST `/dbgc`
+
+Vacuum database.
+
+Request payload:
+- `auth: string|undefined` - Authentication key, only needed for production
+  mode.
 
 ### GET `/info`
 
 Send back debug information.
 
-Returned payload:
-- `method`: `string` - Request method.
-- `url`: `string` - Request URL.
-- `host`: `string` - Host header.
-- `ip`: `string` - Request IP.
-- `proto`: `string` - Request protocol.
-- `ua`: `string` - Request user agent.
-- `headers`: `Object` - Request headers.
-- `socket_ip`: `string` - IP of proxy server.
-- `started`: `string` - Time when server started.
-- `production`: `boolean` - Server mode
+Response payload:
+- `method: string` - Request method.
+- `url: string` - Request URL.
+- `host: string` - Host header.
+- `ip: string` - Request IP.
+- `proto: string` - Request protocol.
+- `ua: string` - Request user agent.
+- `headers: Object` - Request headers.
+- `socket_ip: string` - IP of proxy server.
+- `started: string` - Time when server started.
+- `production: boolean` - Server mode
 
 ### POST `/info`
 
