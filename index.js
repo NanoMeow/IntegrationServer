@@ -347,7 +347,7 @@ server.bind("/mapset", async (e) => {
 /*****************************************************************************/
 
 // Domains should be all lower case
-const re_extract_domain = /^https?:\/\/([a-z0-9_\-.]+)(?:\/|$)/;
+const re_extract_domain = /^https?:\/\/([a-z0-9_\-.]+)(?::|\/|$)/;
 
 server.bind("/repget", async (e) => {
     if (!db_auth(e))
