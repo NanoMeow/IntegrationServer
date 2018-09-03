@@ -280,7 +280,7 @@ const sol_get = async (dom) => {
     if (r.rowCount === 0)
         return null;
     else if (r.rowCount === 1)
-        return sol_sanitizer(r.rows[0].val);
+        return sol_sanitizer(r.rows[0].sol);
     else
         throw new Error(ERR_DB_CORRUPTED);
 };
