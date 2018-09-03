@@ -174,6 +174,9 @@ setInterval(vacuum, VACUUM_INTERVAL).unref();
 const handle_err = (e, err, code) => {
     assert(typeof code === "number" && code !== 200);
 
+    if (err.message === "Bad method")
+        return void e.ez405();
+
     console.log(err.stack);
 
     if (ALLOW_DEBUG_ECHOS)
