@@ -117,7 +117,7 @@ Request payload:
 - `app: string` - Host extension name.
 - `ver: string` - Host extension version.
 - `cat: string` - Report category.
-- `url: stirng` - Report URL.
+- `url: string` - Report URL.
 - `msg: string` - Report message.
 
 ### POST `/repdel` AUTH
