@@ -114,6 +114,7 @@ Response payload:
 Send a report.
 
 Request payload:
+- `dry: boolean|Any` - Set to true for dry run.
 - `app: string` - Host extension name.
 - `ver: string` - Host extension version.
 - `cat: string` - Report category.

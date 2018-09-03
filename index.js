@@ -62,7 +62,7 @@ const server = require("./private/server.js");
 
 // Kill switches for quick disaster response
 const ALLOW_SERVER = true;
-const ALLOW_REPORTS = false;
+const ALLOW_REPORTS = true;
 
 // Kill switches for debugging
 const ALLOW_INVALID_URLS = true;
@@ -395,6 +395,8 @@ server.bind("/repset", async (e) => {
         now: time(),
     };
 
+    payload.dry = p.dry === true;
+
     if (typeof p.app !== "string")
         return void e.ez400();
     payload.app = p.app;
@@ -471,13 +473,26 @@ server.bind("/repset", async (e) => {
 
     /*************************************************************************/
 
-    try {
-        await db.rep_set(JSON.stringify(payload));
-    } catch (err) {
-        return void handle_err(e, err, 500);
-    }
+    if (payload.dry) {
 
-    e.ez200();
+        console.log("Dry run, report discarded");
+
+        if (ALLOW_DEBUG_ECHOS)
+            e.ez200({ payload: payload });
+        else
+            e.ez200();
+
+    } else {
+
+        try {
+            await db.rep_set(JSON.stringify(payload));
+        } catch (err) {
+            return void handle_err(e, err, 500);
+        }
+
+        e.ez200();
+
+    }
 
     /*************************************************************************/
 
