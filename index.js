@@ -30,9 +30,21 @@ process.on("unhandledRejection", (err) => {
     throw err;
 });
 
+/*****************************************************************************/
+
+const assert = require("assert");
+
+/*****************************************************************************/
+
+const prod = process.env.NODE_ENV === "production";
 Object.defineProperty(global, "PROD", {
     enumerable: true,
-    value: process.env.NODE_ENV === "production",
+    get() {
+        return prod;
+    },
+    set() {
+        assert(false);
+    },
 });
 
 if (PROD)
@@ -42,7 +54,6 @@ else
 
 /*****************************************************************************/
 
-const assert = require("assert");
 const db = require("./private/db.js");
 const hack = require("./private/hack.js");
 const server = require("./private/server.js");

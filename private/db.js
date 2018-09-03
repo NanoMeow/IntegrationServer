@@ -112,7 +112,37 @@ const gc = async () => {
 
 /*****************************************************************************/
 
-const map_def = new Map([
+// This map can still be modified with some hack, but it should not be doable
+// by accident
+
+const StaticMap = class extends Map {
+    constructor(init) {
+        super(init);
+        Object.freeze(this);
+    }
+
+    set() {
+        assert(!Object.isFrozen(this));
+
+        return super.set.apply(this, arguments);
+    }
+
+    delete() {
+        assert(!Object.isFrozen(this));
+
+        return super.delete.apply(this, arguments);
+    }
+
+    clear() {
+        assert(!Object.isFrozen(this));
+
+        return super.clear.apply(this, arguments);
+    }
+};
+
+/*****************************************************************************/
+
+const map_def = new StaticMap([
     ["testkey", "testval"],
 
     ["nalastver", "1.0.0.65"],

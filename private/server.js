@@ -63,7 +63,7 @@ const set_enabled = (v) => {
 
 /*****************************************************************************/
 
-const headers = {
+const headers = Object.freeze({
     "Content-Type": "application/json; charset=utf-8",
     "Cache-Control": "no-cache, no-store, must-revalidate",
 
@@ -72,7 +72,7 @@ const headers = {
 
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "0",
-};
+});
 
 /*****************************************************************************/
 
