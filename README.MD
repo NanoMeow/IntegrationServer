@@ -17,12 +17,16 @@ Adapt when appropriate.
 
 ## Endpoints
 
-The entire or some part of request payload may be ignored.
+All request payloads must be JSON. The entirety or part of request payload may
+be ignored, depending on the endpoint.
 
 All response payloads will be JSON. They have the following entry keys, plus
 specific keys depending on the endpoint:
 - `success: boolean` - Result state.
 - `message: string|undefined` - Result message, if there is any.
+
+For endpoints that requires authentication, the request payload must also have:
+- `auth: string|undefined` - Authentication key, if in production mode.
 
 Some endpoints may be disabled.
 
@@ -32,34 +36,26 @@ Do nothing.
 
 ### POST `/`
 
-Do nothing, payload not read.
+Do nothing, request payload not read.
 
 ### POST `/echo`
 
-Send back request payload, with a bit more debug information.
+Send back request headers and payload.
 
 Request payload:
-- `*: Any` - Anything.
+- `...*: ...Any` - Anything.
 
 Response payload:
 - `headers: Object` - Request headers.
 - `payload: Any` - Request payload.
 
-### POST `/dbinit`
+### POST `/dbinit` AUTH
 
 Initialize database.
 
-Request payload:
-- `auth: string|undefined` - Authentication key, only needed for production
-  mode.
-
-### POST `/dbgc`
+### POST `/dbgc` AUTH
 
 Vacuum database.
-
-Request payload:
-- `auth: string|undefined` - Authentication key, only needed for production
-  mode.
 
 ### GET `/info`
 
@@ -81,6 +77,21 @@ Response payload:
 
 Same as GET `/info`, payload not read.
 
+### POST `/mapget`
+
+Read entry of map.
+
+Request payload:
+- `key: string` - Entry key.
+
+### POST `/mapset` AUTH
+
+Write entry of map.
+
+Request payload:
+- `key: string` - Entry key.
+- `val: string` - Entry value.
+
 ### GET `/noop`
 
 Same as GET `/`.
@@ -88,3 +99,53 @@ Same as GET `/`.
 ### POST `/noop`
 
 Same as POST `/`.
+
+### POST `/repget` AUTH
+
+Read 20 reports. Any order.
+
+Response payload:
+- `val: Array` - Reports.
+
+### POST `/repset`
+
+Send a report.
+
+Request payload:
+- `app: string` - Host name.
+- `ver: string` - Host version.
+- `cat: string` - Report category.
+- `url: stirng` - Report URL.
+- `msg: string` - Report message.
+
+### POST `/repdel` AUTH
+
+Delete a report.
+
+Request payload:
+- `id: string` - Serial number.
+
+### POST `/solget`
+
+Lookup solution.
+
+Request payload:
+- `dom: string` - Domain.
+
+Response payload:
+- `val: string|null` - Solution, if exists.
+
+### POST `/solset` AUTH
+
+Create or update solution.
+
+Request payload:
+- `dom: string` - Domain.
+- `sol: string` - Solution.
+
+### POST `/soldel` AUTH
+
+Delete solution.
+
+Request payload:
+- `dom: string` - Domain.

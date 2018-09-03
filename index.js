@@ -385,6 +385,10 @@ server.bind("/repset", async (e) => {
         return void e.ez400();
     payload.app = p.app;
 
+    if (typeof p.ver !== "string")
+        return void e.ez400();
+    payload.ver = p.ver;
+
     if (typeof p.cat !== "string")
         return void e.ez400();
     payload.cat = p.cat;
@@ -519,6 +523,23 @@ server.bind("/solset", async (e) => {
         await db.sol_set(p.dom, p.sol);
     } catch (err) {
         return void handle_err(e, err, 400);
+    }
+
+    e.ez200();
+});
+
+server.bind("/soldel", async (e) => {
+    const p = await db_auth(e);
+    if (!p)
+        return;
+
+    if (typeof p.dom !== "string" || p.dom.length === 0)
+        return void e.ez400();
+
+    try {
+        await db.sol_del(p.dom);
+    } catch (err) {
+        return void handle_err(e, err, 500);
     }
 
     e.ez200();
