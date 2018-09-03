@@ -104,7 +104,7 @@ Same as POST `/`.
 
 ### POST `/repget` AUTH
 
-Read 20 reports. Any order.
+Read any reports in any order, up to 20 at a time.
 
 Response payload:
 - `val: Array` - Reports.
@@ -114,8 +114,8 @@ Response payload:
 Send a report.
 
 Request payload:
-- `app: string` - Host name.
-- `ver: string` - Host version.
+- `app: string` - Host extension name.
+- `ver: string` - Host extension version.
 - `cat: string` - Report category.
 - `url: stirng` - Report URL.
 - `msg: string` - Report message.
