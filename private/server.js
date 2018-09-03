@@ -197,6 +197,9 @@ const RequestEvent = class {
 
         assert(typeof lim === "number" && !isNaN(lim));
 
+        if (this.method !== "POST")
+            throw new Error("Bad method");
+
         let blocking = false;
         let received = 0;
 
