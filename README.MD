@@ -20,17 +20,19 @@ Adapt when appropriate.
 All request payloads must be JSON. The entirety or part of request payload may
 be ignored, depending on the endpoint.
 
-All response payloads will be JSON. They have the following entry keys, plus
-specific keys depending on the endpoint:
-- `success: boolean` - Result state.
-- `message: string|undefined` - Result message, if there is any.
+For endpoints that requires authentication, the request payload must have:
+- `auth: string|undefined` - Authentication key, if production.
 
-For endpoints that requires authentication, the request payload must also have:
-- `auth: string|undefined` - Authentication key, if in production mode.
+All response payloads will be JSON. Beside content specific to endpoint, the
+response payload will also have:
+- `success: boolean` - Result state.
+- `message: string|undefined` - Result message, if any.
+
+Debug endpoints will send back formatted JSON, others minified.
 
 Some endpoints may be disabled.
 
-### GET `/` or 
+### GET `/`
 
 Do nothing.
 
@@ -38,7 +40,7 @@ Do nothing.
 
 Do nothing, request payload not read.
 
-### POST `/echo`
+### POST `/echo` PRETTY
 
 Send back request headers and payload.
 
@@ -57,9 +59,9 @@ Initialize database.
 
 Vacuum database.
 
-### GET `/info`
+### GET `/info` PRETTY
 
-Send back debug information.
+Get debug information.
 
 Response payload:
 - `method: string` - Request method.
@@ -69,9 +71,9 @@ Response payload:
 - `proto: string` - Request protocol.
 - `ua: string` - Request user agent.
 - `headers: Object` - Request headers.
-- `socket_ip: string` - IP of proxy server.
+- `socket_ip: string` - IP of proxy server, or request IP if there is no proxy.
 - `started: string` - Time when server started.
-- `production: boolean` - Server mode
+- `production: boolean` - Server mode.
 
 ### POST `/info`
 
