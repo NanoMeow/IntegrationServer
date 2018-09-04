@@ -152,3 +152,7 @@ Delete solution.
 
 Request payload:
 - `dom: string` - Domain.
+
+### POST `/unthrottle` AUTH
+
+Clear call throttle for calling IP.

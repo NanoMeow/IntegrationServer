@@ -281,6 +281,22 @@ const db_auth = async (e) => {
 
 /*****************************************************************************/
 
+server.bind("/unthrottle", (e) => {
+    if (!await db_auth(e))
+        return;
+
+    const entry = call_map.get(e.ip);
+
+    if (entry) {
+        entry.stamp -= THROTTLE_TIMEOUT;
+        entry.vacuum();
+    }
+
+    e.ez200();
+});
+
+/*****************************************************************************/
+
 server.bind("/dbinit", async (e) => {
     if (!await db_auth(e))
         return;
@@ -421,17 +437,23 @@ server.bind("/repset", async (e) => {
 
     /*************************************************************************/
 
-    if (call_map.has(e.ip)) {
-        if (!call_map.get(e.ip).add(payload.url)) {
+    const entry = call_map.get(e.ip);
+
+    if (entry === undefined) {
+
+        const t = new CallThrottler();
+        t.add(payload.url);
+        call_map.set(e.ip, t);
+
+    } else {
+
+        if (!entry.add(payload.url)) {
             return void e.ez200({
                 success: false,
                 message: "You submitted too many reports, take a break!",
             });
         }
-    } else {
-        const t = new CallThrottler();
-        t.add(payload.url);
-        call_map.set(e.ip, t);
+
     }
 
     /*************************************************************************/
