@@ -54,6 +54,7 @@ else
 
 /*****************************************************************************/
 
+const error = require("./private/error.js");
 const db = require("./private/db.js");
 const hack = require("./private/hack.js");
 const server = require("./private/server.js");
@@ -174,10 +175,10 @@ setInterval(vacuum, VACUUM_INTERVAL).unref();
 const handle_err = (e, err, code) => {
     assert(typeof code === "number" && code !== 200);
 
-    if (err.message === "Bad method")
-        return void e.ez405();
-
-    console.log(err.stack);
+    if (err instanceof error.RequestError)
+        code = err.code;
+    else
+        console.log(err.stack);
 
     if (ALLOW_DEBUG_ECHOS)
         return void e.fail(code, err.message);
@@ -281,7 +282,7 @@ const db_auth = async (e) => {
 
 /*****************************************************************************/
 
-server.bind("/unthrottle", (e) => {
+server.bind("/unthrottle", async (e) => {
     if (!await db_auth(e))
         return;
 
@@ -497,7 +498,7 @@ server.bind("/repset", async (e) => {
 
     if (payload.dry) {
 
-        console.log("Dry run, report discarded");
+        console.log("Dry run, report discarded: " + JSON.stringify(payload));
 
         if (ALLOW_DEBUG_ECHOS)
             e.ez200({ payload: payload });

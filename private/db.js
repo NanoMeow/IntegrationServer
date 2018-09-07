@@ -27,6 +27,7 @@
 /*****************************************************************************/
 
 const assert = require("assert");
+const error = require("./error.js");
 const pg = require("pg");
 
 /*****************************************************************************/
@@ -198,7 +199,7 @@ const map_get = async (key) => {
     assert(typeof key === "string");
 
     if (!map_def.has(key))
-        throw new Error(ERR_MAP_NOT_FOUND);
+        throw new error.RequestError(ERR_MAP_NOT_FOUND, 400);
 
     const r = await pool.query("SELECT val FROM map WHERE key = $1;", [key]);
 
@@ -214,10 +215,10 @@ const map_set = async (key, val) => {
     assert(typeof key === "string" && typeof val === "string");
 
     if (!map_def.has(key))
-        throw new Error(ERR_MAP_NOT_FOUND);
+        throw new error.RequestError(ERR_MAP_NOT_FOUND, 400);
 
     if (!map_validator(key, val))
-        throw new Error(ERR_MAP_NEW_VAL_NOT_VALID);
+        throw new error.RequestError(ERR_MAP_NEW_VAL_NOT_VALID, 400);
 
     await pool.query(
         [
@@ -253,7 +254,7 @@ const rep_del = async (id) => {
     assert(typeof id === "string");
 
     if (!re_is_numeric.test(id))
-        throw new Error(ERR_REP_ID_NOT_VALID);
+        throw new error.RequestError(ERR_REP_ID_NOT_VALID, 400);
 
     await pool.query("DELETE FROM reports WHERE id = $1::BIGSERIAL;", [id]);
 };

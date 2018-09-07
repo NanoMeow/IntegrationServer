@@ -27,6 +27,7 @@
 /*****************************************************************************/
 
 const assert = require("assert");
+const error = require("./error.js");
 const http = require("http");
 
 /*****************************************************************************/
@@ -198,7 +199,7 @@ const RequestEvent = class {
         assert(typeof lim === "number" && !isNaN(lim));
 
         if (this.method !== "POST")
-            throw new Error("Bad method");
+            throw new error.RequestError("Bad method", 405);
 
         let blocking = false;
         let received = 0;
@@ -216,7 +217,7 @@ const RequestEvent = class {
 
                 if (received > lim) {
                     blocking = true;
-                    reject(new Error("Payload too large"));
+                    reject(new error.RequestError("Payload too large", 413));
                     return;
                 }
 
@@ -236,7 +237,9 @@ const RequestEvent = class {
                 }
 
                 if (typeof r !== "object" || r === null)
-                    return void reject(new Error("Invalid payload"));
+                    return void reject(
+                        new error.RequestError("Invalid payload", 400),
+                    );
 
                 resolve(r);
             });
@@ -244,6 +247,8 @@ const RequestEvent = class {
             this.req.on("error", (err) => {
                 blocking = true;
 
+                // TODO: See if this error can be triggered by client, if yes,
+                // change it to RequestError so call stack won't get logged
                 reject(err);
             });
         });
