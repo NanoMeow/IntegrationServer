@@ -69,6 +69,7 @@ const ALLOW_REPORTS = true;
 const ALLOW_INVALID_URLS = true;
 const ALLOW_DEBUG_CALLS = true;
 const ALLOW_DEBUG_ECHOS = true;
+const ALLOW_DRY_RUN_LOGS = true;
 
 /*****************************************************************************/
 
@@ -498,7 +499,9 @@ server.bind("/repset", async (e) => {
 
     if (payload.dry) {
 
-        console.log("Dry run, report discarded: " + JSON.stringify(payload));
+        console.log("Dry run, report not saved to database");
+        if (ALLOW_DRY_RUN_LOGS)
+            console.log(payload);
 
         if (ALLOW_DEBUG_ECHOS)
             e.ez200({ payload: payload });
