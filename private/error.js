@@ -26,6 +26,10 @@
 
 /*****************************************************************************/
 
+const assert = require("assert");
+
+/*****************************************************************************/
+
 const RequestError = class extends Error {
     constructor(msg, code) {
         super(msg);
