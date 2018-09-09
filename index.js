@@ -77,7 +77,7 @@ const HOST_DOMAIN = "nanoserver.herokuapp.com";
 
 // Set to 10 minutes for now, considering the lifetime of the map, this could
 // be a bit too long
-const VACUUM_INTERVAL = 600000;
+const CALL_VACUUM_INTERVAL = 600000;
 
 const SIZE_LIM_ECHO_CALL = 32;
 const SIZE_LIM_DB_CALL = 8192;
@@ -113,6 +113,8 @@ if (PROD)
     server.set_host(HOST_DOMAIN);
 
 /*****************************************************************************/
+
+// TODO: Move to Redis
 
 const CallThrottler = class {
     constructor() {
@@ -155,13 +157,9 @@ const CallThrottler = class {
     }
 };
 
-/*****************************************************************************/
-
-// Heroku will shutdown the server on inactivity, but that only happens after
-// 30 minutes, by which time this map would be useless anyway
 const call_map = new Map();
 
-const vacuum = () => {
+const call_vacuum = () => {
     for (const [key, val] of call_map) {
         val.vacuum();
         if (val.disposed())
@@ -169,7 +167,7 @@ const vacuum = () => {
     }
 };
 
-setInterval(vacuum, VACUUM_INTERVAL).unref();
+setInterval(call_vacuum, CALL_VACUUM_INTERVAL).unref();
 
 /*****************************************************************************/
 
