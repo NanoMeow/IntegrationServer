@@ -366,6 +366,7 @@ server.bind("/mapset", async (e) => {
 /*****************************************************************************/
 
 // Domains should be all lower case
+// TODO: What about raw IPv6 address?
 const re_extract_domain = /^https?:\/\/([a-z0-9_\-.]+)(?::|\/|\?|#|$)/;
 
 server.bind("/repget", async (e) => {
