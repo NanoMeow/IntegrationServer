@@ -69,8 +69,11 @@ const headers = Object.freeze({
     "Cache-Control": "no-cache, no-store, must-revalidate",
 
     "Access-Control-Allow-Origin": "*",
+    // "Expect-CT": "max-age=604800, enforce",
+    "Expect-CT": "max-age=604800",
     "Strict-Transport-Security": "max-age=604800",
 
+    "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "X-XSS-Protection": "0",
 });
