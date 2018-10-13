@@ -75,15 +75,17 @@ const ALLOW_DRY_RUN_LOGS = true;
 
 const HOST_DOMAIN = "nanoserver.herokuapp.com";
 
-// Set to 10 minutes for now, considering the lifetime of the map, this could
-// be a bit too long
-const CALL_VACUUM_INTERVAL = 600000;
-
 const SIZE_LIM_ECHO_CALL = 32;
 const SIZE_LIM_DB_CALL = 8192;
 
 const MIN_LEN_DB_SECRET = 16;
 const MAX_LEN_DB_SECRET = 512;
+
+/*****************************************************************************/
+
+// Set to 10 minutes for now, considering the lifetime of the map, this could
+// be a bit too long
+const CALL_VACUUM_INTERVAL = 600000;
 
 // 5 messages per 30 minutes
 const THROTTLE_TIMEOUT = 1800000;
