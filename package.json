@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": "10.16.1"
+    "node": "10.16.2"
   },
   "dependencies": {
     "pg": "7.12.0"
